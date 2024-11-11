@@ -21,6 +21,8 @@ public class EMP_DTO {
 		this.comm = comm;
 		this.deptno = deptno;
 	}
+	
+	public EMP_DTO() {};
 	public int getEmpno() {
 		return empno;
 	}
