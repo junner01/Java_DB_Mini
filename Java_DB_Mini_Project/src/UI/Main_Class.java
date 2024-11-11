@@ -1,7 +1,14 @@
 package UI;
 
 import javax.swing.*;
-import java.awt.*;
+
+import DAO.Csb806Dao;
+import DTO.Csb806Dto;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
@@ -13,6 +20,7 @@ private JButton selectButton;
 private JButton updateButton;
 private JButton deleteButton;
 private JButton clearButton;
+private Csb806Dao dao;
 private Connection conn;
 
 public Main_Class() {
@@ -40,6 +48,8 @@ resultArea = new JTextArea(10, 50);
 resultArea.setEditable(false);
 add(new JScrollPane(resultArea), BorderLayout.CENTER);
 
+
+dao = new Csb806Dao();
 // Database connection setup
 setupDatabaseConnection();
 
@@ -48,7 +58,7 @@ insertButton.addActionListener(e -> performInsert());
 selectButton.addActionListener(e -> performSelect());
 updateButton.addActionListener(e -> performUpdate());
 deleteButton.addActionListener(e -> performDelete());
-clearButton.addActionListener(e -> resultArea.setText(""));
+clearButton.addActionListener(e -> showDeptStatistics());
 
 setVisible(true);
 }
@@ -119,6 +129,21 @@ resultArea.append("Delete operation failed.\n");
 e.printStackTrace();
 }
 }
+
+private void showDeptStatistics() {
+    resultArea.setText("그룹함수 예제:\n");
+    List<Csb806Dto> deptStatsList = dao.selectDeptStatistics();
+    
+    for (Csb806Dto deptStat : deptStatsList) {
+        resultArea.append("부서번호: " + deptStat.getDeptno() +
+                          ", 사원수: " + deptStat.getEmpCount() +
+                          ", 최고 급여: " + deptStat.getMaxSal() +
+                          ", 최소 급여: " + deptStat.getMinSal() +
+                          ", 급여 합계: " + deptStat.getTotalSal() +
+                          ", 평균 급여: " + deptStat.getAvgSal() + "\n");
+    }
+}
+
 
 public static void main(String[] args) {
 SwingUtilities.invokeLater(Main_Class::new);
