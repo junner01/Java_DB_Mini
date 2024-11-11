@@ -6,19 +6,11 @@ import java.util.List;
 
 public class Jih0316_DAO {
 
-    private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
     private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
     private static final String USERID = "scott";
     private static final String PASSWORD = "tiger";
 
-    public Jih0316_DAO() {
-        try {
-            Class.forName(DRIVER);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
+    // Employee 클래스 정의
     public class Employee {
         private int empNo;
         private String eName;
@@ -32,17 +24,21 @@ public class Jih0316_DAO {
             this.dName = dName;
         }
 
+        public void setEmpNo(int empNo) { this.empNo = empNo; }
+        public void setEName(String eName) { this.eName = eName; }
+        public void setDeptNo(int deptNo) { this.deptNo = deptNo; }
+        public void setDName(String dName) { this.dName = dName; }
+
         @Override
         public String toString() {
             return "Employee [empNo=" + empNo + ", eName=" + eName + ", deptNo=" + deptNo + ", dName=" + dName + "]";
         }
     }
 
-    // Fetch employee data with a JOIN query
+    // 직원 데이터를 조회하여 Employee 객체 목록 반환
     public List<Employee> selectEmployees() {
         List<Employee> employeeList = new ArrayList<>();
         
-        // The SQL query to join emp and dept tables and get the required columns
         String sqlQuery = "SELECT e.empno, e.ename, e.deptno, d.dname " +
                           "FROM emp e " +
                           "JOIN dept d ON e.deptno = d.deptno";
