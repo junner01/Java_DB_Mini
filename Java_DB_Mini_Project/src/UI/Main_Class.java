@@ -1,15 +1,14 @@
 package UI;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
 import DAO.Jih0316_DAO;
 import DAO.Jih0316_DAO.Employee;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+
 public class Main_Class extends JFrame {
-    private JPanel resultPanel;
+    private JTextArea resultArea;
     private JButton insertButton;
     private JButton selectButton;
     private JButton updateButton;
@@ -37,47 +36,29 @@ public class Main_Class extends JFrame {
         buttonPanel.add(clearButton);
         add(buttonPanel, BorderLayout.NORTH);
 
-        // 결과 패널 생성
-        resultPanel = new JPanel();
-        resultPanel.setLayout(new BoxLayout(resultPanel, BoxLayout.Y_AXIS));
-        JScrollPane scrollPane = new JScrollPane(resultPanel);
-        add(scrollPane, BorderLayout.CENTER);
+        resultArea = new JTextArea(10, 50);
+        resultArea.setEditable(false);
+        add(new JScrollPane(resultArea), BorderLayout.CENTER);
 
-        // 버튼 클릭 이벤트 처리
+        // 버튼 기능 할당
         insertButton.addActionListener(e -> {});
-        
-        // "조이한" 버튼 클릭 시 직원 데이터 조회
-        selectButton.addActionListener(e -> Jih0316());
+        selectButton.addActionListener(e -> fetchAndDisplayEmployees());
         updateButton.addActionListener(e -> {});
         deleteButton.addActionListener(e -> {});
-        clearButton.addActionListener(e -> {
-            resultPanel.removeAll();
-            resultPanel.revalidate();
-            resultPanel.repaint();
-        });
+        clearButton.addActionListener(e -> {});
 
         setVisible(true);
     }
 
-    // 직원 데이터를 결과 패널에 표시하는 메소드
-    private void Jih0316() {
+    // 직원 데이터를 조회하고 결과를 출력하는 메서드
+    private void fetchAndDisplayEmployees() {
+        resultArea.setText(""); // 이전 결과 초기화
         Jih0316_DAO dao = new Jih0316_DAO();
-        
-        // 직원 데이터 조회
-        try {
-            List<Employee> employees = dao.selectEmployees(); // 부서 입력 없이 조회
-            resultPanel.removeAll(); // 이전 결과 삭제
 
-            // 직원 정보 레이블로 추가
-            for (Employee emp : employees) {
-                JLabel employeeLabel = new JLabel(emp.toString());
-                resultPanel.add(employeeLabel);
-            }
-            resultPanel.revalidate();
-            resultPanel.repaint();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "데이터 조회 중 오류 발생: " + ex.getMessage(), "오류", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
+        // 직원 데이터를 조회하여 텍스트 영역에 출력
+        List<Employee> employees = dao.selectEmployees(); // 예외 처리는 DAO에서 처리됨
+        for (Employee emp : employees) {
+            resultArea.append(emp.toString() + "\n");
         }
     }
 
