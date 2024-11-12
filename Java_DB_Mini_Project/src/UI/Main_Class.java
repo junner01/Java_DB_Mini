@@ -31,10 +31,14 @@ public class Main_Class extends JFrame {
 	private JButton kjy0227Button;
 	private JButton lshButton;
 	private JButton csbButton;
+	private JButton addBoardButton;
+	private JButton searchBoardButton;
+	private JButton deleteUserButton;
+	private JButton salTopNButton;
 
     public Main_Class() {
         setTitle("Database Control Panel");
-        setSize(600, 400);
+        setSize(800, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -45,12 +49,22 @@ public class Main_Class extends JFrame {
         kjy0227Button = new JButton("김진영");
         lshButton = new JButton("이상현");
         csbButton = new JButton("조수빈");
+        
+        addBoardButton = new JButton("게시판 추가");
+        searchBoardButton = new JButton("게시판 조회");
+        deleteUserButton = new JButton("유저 삭제");
+        salTopNButton = new JButton("급여 TOP N");
 
         buttonPanel.add(kjy1122Button);
         buttonPanel.add(jihButton);
         buttonPanel.add(kjy0227Button);
         buttonPanel.add(lshButton);
         buttonPanel.add(csbButton);
+        
+        buttonPanel.add(addBoardButton);
+        buttonPanel.add(searchBoardButton);
+        buttonPanel.add(deleteUserButton);
+        buttonPanel.add(salTopNButton);
         add(buttonPanel, BorderLayout.NORTH);
 
         resultArea = new JTextArea(10, 50);
