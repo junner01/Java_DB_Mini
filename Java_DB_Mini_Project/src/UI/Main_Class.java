@@ -7,12 +7,12 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import DAO.Kjy1122DAO;
 import DAO.LSH0708_Project_DAO;
 import DAO.Project_DAO;
 import DTO.EMP_DEPT_DTO;
@@ -22,6 +22,7 @@ public class Main_Class extends JFrame {
 	
 	LSH0708_Project_DAO lsh_dao=new LSH0708_Project_DAO();
 	Project_DAO dao = new Project_DAO();
+	Kjy1122DAO kjy_dao = new Kjy1122DAO();
 	
 	private JTextArea resultArea;
 	private JButton insertButton;
@@ -56,16 +57,17 @@ public class Main_Class extends JFrame {
 		add(new JScrollPane(resultArea), BorderLayout.CENTER);
 
 		// Button actions
-		insertButton.addActionListener(e -> {});
+		insertButton.addActionListener(e -> KJY1122());
 		selectButton.addActionListener(e -> {});
-		updateButton.addActionListener(e -> clickUpdBtn());
+		updateButton.addActionListener(e -> KJY0227());
 		deleteButton.addActionListener(e -> LSH0708());
 		clearButton.addActionListener(e -> {});
 
 		setVisible(true);
 	}
 	
-	public void clickUpdBtn() {
+	//김진영
+	public void KJY0227() {
 		resultArea.setText("");
 		
 		List<EMP_DEPT_DTO> empDeptListKjy = dao.getEmpDeptListKjy();
@@ -84,6 +86,7 @@ public class Main_Class extends JFrame {
 		resultArea.repaint();
 	}
 
+	//이상현
 	public void LSH0708() {
 		 ArrayList<EMP_DTO> list = lsh_dao.select();
 		 
@@ -97,6 +100,20 @@ public class Main_Class extends JFrame {
 		 resultArea.revalidate();
 		 resultArea.repaint();
 		 
+	}
+	
+	//강준영
+	public void KJY1122() {
+		List<String[]> list = kjy_dao.getEmpDataByDept();
+		 
+		resultArea.setText("");
+		for(String[] dto : list) {
+			String result = "EMPNO:" + dto[0] + ", ENAME:"+ dto[1] + ", DEPTNO:" + dto[7] + ", SAL:" + dto[5];
+			resultArea.append(result+"\n"); 
+		}
+		
+		resultArea.revalidate();
+		resultArea.repaint();
 	}
 
 	public static void main(String[] args) {
