@@ -4,17 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-<<<<<<< HEAD
+
 import java.sql.SQLException;
-=======
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
->>>>>>> branch 'main' of https://github.com/dltkdgus3769/Java_DB_Mini.git
+
 import java.util.ArrayList;
 import java.util.List;
 
-<<<<<<< HEAD
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -26,7 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-=======
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -40,7 +40,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
->>>>>>> branch 'main' of https://github.com/dltkdgus3769/Java_DB_Mini.git
+
 import javax.swing.table.DefaultTableModel;
 
 import DAO.Csb806Dao;
