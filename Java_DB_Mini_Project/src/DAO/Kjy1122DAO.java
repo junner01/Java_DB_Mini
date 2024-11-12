@@ -9,10 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Kjy1122DAO {
-    String driver = "oracle.jdbc.driver.OracleDriver"; 
-    String url = "jdbc:oracle:thin:@localhost:1521:xe";
-    String userid = "system";
-    String passwd = "1234";
+//    String driver = "oracle.jdbc.driver.OracleDriver"; 
+//    String url = "jdbc:oracle:thin:@localhost:1521:xe";
+//    String userid = "system";
+//    String passwd = "1234";
+	String driver = "oracle.jdbc.driver.OracleDriver";
+	String url = "jdbc:oracle:thin:@localhost:1521:xe";
+	String userid = "scott";
+	String passwd = "tiger";
 
     public List<String[]> getEmpDataByDept() {
         List<String[]> empList = new ArrayList<>();

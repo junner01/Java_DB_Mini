@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Main_Class extends JFrame {
+public class Main_ClassKjy1122 extends JFrame {
 	private JTextArea resultArea;
 	private JButton insertButton;
 	private JButton selectButton;
@@ -13,7 +13,7 @@ public class Main_Class extends JFrame {
 	private JButton deleteButton;
 	private JButton clearButton;
 
-	public Main_Class() {
+	public Main_ClassKjy1122() {
 		setTitle("Database Control Panel");
 		setSize(600, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
