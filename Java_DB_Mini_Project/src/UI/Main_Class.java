@@ -213,6 +213,8 @@ public class Main_Class extends JFrame {
 
         dialog.setVisible(true);
     }
+    
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main_Class::new);
