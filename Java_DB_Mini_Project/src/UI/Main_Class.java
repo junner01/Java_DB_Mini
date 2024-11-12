@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import DAO.Csb806Dao;
 import DAO.Jih0316_DAO;
@@ -35,7 +36,7 @@ public class Main_Class extends JFrame {
 	private JButton searchBoardButton;
 	private JButton deleteUserButton;
 	private JButton salTopNButton;
-
+	
     public Main_Class() {
         setTitle("Database Control Panel");
         setSize(800, 400);
@@ -77,13 +78,15 @@ public class Main_Class extends JFrame {
         kjy0227Button.addActionListener(e -> KJY0227());
         lshButton.addActionListener(e -> LSH0708());
         csbButton.addActionListener(e -> showDeptStatistics());
-
+        
+        searchBoardButton.addActionListener(e -> showBoardList());
+        
 		setVisible(true);
 	}
 	
 	//김진영
 	public void KJY0227() {
-		resultArea.setText("");
+		resultArea.setText("--- LEFT OUTER JOIN 예시 ---\n");
 		
 		List<EMP_DEPT_DTO> empDeptListKjy = dao.getEmpDeptListKjy();
 		for (EMP_DEPT_DTO empDept : empDeptListKjy) {
@@ -157,6 +160,36 @@ public class Main_Class extends JFrame {
                               ", 급여 합계: " + deptStat.getTotalSal() +
                               ", 평균 급여: " + deptStat.getAvgSal() + "\n");
         }
+    }
+    
+    //게시판 조회
+    public void showBoardList() {
+    	// 데이터 가져오기
+        String[] columnNames = {"글번호", "제목", "내용", "작성자명", "작성자번호", "작성일"};
+        Object[][] data = dao.getBoardList();
+
+        // JTable
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+        JTable table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        JDialog dialog = new JDialog();
+        dialog.setTitle("게시판 목록");
+        dialog.setSize(700, 300);
+        dialog.setLocationRelativeTo(null); // 화면 중앙에 띄우기
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        // 상단 버튼 패널
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton addBoardButton = new JButton("게시판 추가");
+        addBoardButton.addActionListener(e -> {});
+        topPanel.add(addBoardButton);
+
+        // 팝업 창에 상단 패널과 테이블을 포함한 JScrollPane 추가
+        dialog.add(topPanel, BorderLayout.NORTH);
+        dialog.add(scrollPane, BorderLayout.CENTER);
+
+        dialog.setVisible(true);
     }
 
     public static void main(String[] args) {
