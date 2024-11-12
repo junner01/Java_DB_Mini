@@ -5,18 +5,15 @@ import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
+import DAO.Csb806Dao;
 import DAO.Jih0316_DAO;
 import DAO.Jih0316_DAO.Employee;
 import DAO.Kjy1122DAO;
 import DAO.LSH0708_Project_DAO;
 import DAO.Project_DAO;
+import DTO.Csb806Dto;
 import DTO.EMP_DEPT_DTO;
 import DTO.EMP_DTO;
 
@@ -26,13 +23,14 @@ public class Main_Class extends JFrame {
 	Project_DAO dao = new Project_DAO();
 	Kjy1122DAO kjy_dao = new Kjy1122DAO();
 	Jih0316_DAO jih_dao = new Jih0316_DAO();
+	Csb806Dao csb_dao = new Csb806Dao();
 	
 	private JTextArea resultArea;
-	private JButton insertButton;
-	private JButton selectButton;
-	private JButton updateButton;
-	private JButton deleteButton;
-	private JButton clearButton;
+	private JButton kjy1122Button;
+	private JButton jihButton;
+	private JButton kjy0227Button;
+	private JButton lshButton;
+	private JButton csbButton;
 
     public Main_Class() {
         setTitle("Database Control Panel");
@@ -42,17 +40,17 @@ public class Main_Class extends JFrame {
 
         // UI 컴포넌트 초기화
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        insertButton = new JButton("강준영");
-        selectButton = new JButton("조이한");
-        updateButton = new JButton("김진영");
-        deleteButton = new JButton("이상현");
-        clearButton = new JButton("조수빈");
+        kjy1122Button = new JButton("강준영");
+        jihButton = new JButton("조이한");
+        kjy0227Button = new JButton("김진영");
+        lshButton = new JButton("이상현");
+        csbButton = new JButton("조수빈");
 
-        buttonPanel.add(insertButton);
-        buttonPanel.add(selectButton);
-        buttonPanel.add(updateButton);
-        buttonPanel.add(deleteButton);
-        buttonPanel.add(clearButton);
+        buttonPanel.add(kjy1122Button);
+        buttonPanel.add(jihButton);
+        buttonPanel.add(kjy0227Button);
+        buttonPanel.add(lshButton);
+        buttonPanel.add(csbButton);
         add(buttonPanel, BorderLayout.NORTH);
 
         resultArea = new JTextArea(10, 50);
@@ -60,11 +58,11 @@ public class Main_Class extends JFrame {
         add(new JScrollPane(resultArea), BorderLayout.CENTER);
 
 		// Button actions
-		insertButton.addActionListener(e -> KJY1122());
-		selectButton.addActionListener(e -> fetchAndDisplayEmployees());
-		updateButton.addActionListener(e -> KJY0227());
-		deleteButton.addActionListener(e -> LSH0708());
-		clearButton.addActionListener(e -> {});
+        kjy1122Button.addActionListener(e -> KJY1122());
+        jihButton.addActionListener(e -> fetchAndDisplayEmployees());
+        kjy0227Button.addActionListener(e -> KJY0227());
+        lshButton.addActionListener(e -> LSH0708());
+        csbButton.addActionListener(e -> showDeptStatistics());
 
 		setVisible(true);
 	}
@@ -129,6 +127,21 @@ public class Main_Class extends JFrame {
         List<Employee> employees = dao.selectEmployees(); // 예외 처리는 DAO에서 처리됨
         for (Employee emp : employees) {
             resultArea.append(emp.toString() + "\n");
+        }
+    }
+    
+    //조수빈
+    private void showDeptStatistics() {
+        resultArea.setText("그룹함수 예제:\n");
+        List<Csb806Dto> deptStatsList = csb_dao.selectDeptStatistics();
+        
+        for (Csb806Dto deptStat : deptStatsList) {
+            resultArea.append("부서번호: " + deptStat.getDeptno() +
+                              ", 사원수: " + deptStat.getEmpCount() +
+                              ", 최고 급여: " + deptStat.getMaxSal() +
+                              ", 최소 급여: " + deptStat.getMinSal() +
+                              ", 급여 합계: " + deptStat.getTotalSal() +
+                              ", 평균 급여: " + deptStat.getAvgSal() + "\n");
         }
     }
 
