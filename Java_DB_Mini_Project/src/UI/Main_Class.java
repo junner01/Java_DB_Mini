@@ -2,13 +2,25 @@ package UI;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import DAO.Csb806Dao;
+import DAO.Jih0316_Board_DAO;
 import DAO.Jih0316_DAO;
 import DAO.Jih0316_DAO.Employee;
 import DAO.Kjy1122DAO;
@@ -80,6 +92,8 @@ public class Main_Class extends JFrame {
         csbButton.addActionListener(e -> showDeptStatistics());
         searchBoardButton.addActionListener(e -> showBoardList());
         salTopNButton.addActionListener(e -> showSalTopN());
+        
+        deleteUserButton.addActionListener(e -> deleteUser());
 
 		setVisible(true);
 	}
@@ -168,6 +182,41 @@ public class Main_Class extends JFrame {
             resultArea.append(emp.toString() + "\n");
         }
     }
+    
+    private void deleteUser() {
+        // 사용자에게 empno (사원 번호)를 입력받음
+        String empnoStr = JOptionPane.showInputDialog("삭제할 사원 번호를 입력하세요:");
+        if (empnoStr == null || empnoStr.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "유효한 사원 번호를 입력해주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // empno를 정수로 변환
+        int empnoToDelete;
+        try {
+            empnoToDelete = Integer.parseInt(empnoStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "잘못된 번호 형식입니다.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 사용자 삭제 및 게시글 삭제 수행
+        boolean isDeleted = false;
+        try {
+            // empno에 해당하는 사원과 게시글 삭제
+            isDeleted = new Jih0316_Board_DAO().deleteUser(empnoToDelete);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "삭제 중 오류가 발생했습니다: " + e.getMessage(), "오류", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 삭제 성공 여부에 따른 메시지 표시
+        String message = isDeleted ? "사원과 해당 사원의 게시글이 성공적으로 삭제되었습니다." : "사원 또는 사원의 게시글 삭제에 실패했습니다.";
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+
+
     
     //조수빈
     private void showDeptStatistics() {
