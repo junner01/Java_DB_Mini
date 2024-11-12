@@ -1,11 +1,20 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+<<<<<<< HEAD
 import java.sql.SQLException;
+=======
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+>>>>>>> branch 'main' of https://github.com/dltkdgus3769/Java_DB_Mini.git
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< HEAD
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -17,6 +26,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+=======
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+>>>>>>> branch 'main' of https://github.com/dltkdgus3769/Java_DB_Mini.git
 import javax.swing.table.DefaultTableModel;
 
 import DAO.Csb806Dao;
@@ -48,6 +72,14 @@ public class Main_Class extends JFrame {
 	private JButton searchBoardButton;
 	private JButton deleteUserButton;
 	private JButton salTopNButton;
+	
+	private JTextField boardNoField;
+	private JTextField titleField;
+	private JTextArea contentField;
+	private JTextField writerField;
+	private JTextField empNoField;
+	
+	
 	
     public Main_Class() {
         setTitle("Database Control Panel");
@@ -98,6 +130,7 @@ public class Main_Class extends JFrame {
 		setVisible(true);
 	}
 	
+    
 	//김진영
 	public void KJY0227() {
 		resultArea.setText("--- LEFT OUTER JOIN 예시 ---\n");
@@ -252,15 +285,111 @@ public class Main_Class extends JFrame {
 
         // 상단 버튼 패널
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton addBoardButton = new JButton("게시판 추가");
-        addBoardButton.addActionListener(e -> {});
+        JButton addBoardButton = new JButton("게시글 추가");
+        addBoardButton.addActionListener(e -> openAddUserWindow());
         topPanel.add(addBoardButton);
+        JButton deleteBoardButton = new JButton("게시글 삭제");
+        deleteBoardButton.addActionListener(e ->{});
+        topPanel.add(deleteBoardButton);
 
         // 팝업 창에 상단 패널과 테이블을 포함한 JScrollPane 추가
         dialog.add(topPanel, BorderLayout.NORTH);
         dialog.add(scrollPane, BorderLayout.CENTER);
 
         dialog.setVisible(true);
+    }
+    public void openAddUserWindow() {
+    	JFrame newFrame = new JFrame("게시글 추가");
+		newFrame.setSize(350, 450);
+		newFrame.setLocationRelativeTo(null);
+		newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 새 창만 닫기
+		newFrame.setLayout(new GridBagLayout());
+		Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(5, 5, 5, 5); // 패딩 설정
+
+		// 입력 필드 및 레이블 생성
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		newFrame.add(new JLabel("글번호:"), gbc);
+
+		gbc.gridx = 1;
+		boardNoField = new JTextField();
+		boardNoField.setPreferredSize(new Dimension(200, 25));
+		boardNoField.setBorder(border);
+		newFrame.add(boardNoField, gbc);
+
+
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		newFrame.add(new JLabel("제목:"), gbc);
+		gbc.gridx = 1;
+		titleField = new JTextField();
+		titleField.setPreferredSize(new Dimension(200, 25));
+		titleField.setBorder(border);
+		newFrame.add(titleField, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		newFrame.add(new JLabel("내용:"), gbc);
+		gbc.gridx = 1;
+		contentField = new JTextArea(10,10);
+		contentField.setPreferredSize(new Dimension(200, 25));
+		contentField.setBorder(border);
+		newFrame.add(contentField, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		newFrame.add(new JLabel("작성자명:"), gbc);
+		gbc.gridx = 1;
+		writerField = new JTextField();
+		writerField.setPreferredSize(new Dimension(200, 25));
+		writerField.setBorder(border);
+		newFrame.add(writerField, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		newFrame.add(new JLabel("작성자 번호:"), gbc);
+		gbc.gridx = 1;
+		empNoField = new JTextField();
+		empNoField.setPreferredSize(new Dimension(200, 25));
+		empNoField.setBorder(border);
+		newFrame.add(empNoField, gbc);
+
+		
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		gbc.gridwidth = 2; // 버튼이 두 열을 차지하도록 설정
+		gbc.anchor = GridBagConstraints.CENTER; // 중앙 정렬
+		JButton addBoardButton = new JButton("게시글 추가");
+		addBoardButton.setPreferredSize(new Dimension(120, 40));
+		newFrame.add(addBoardButton, gbc);
+		addBoardButton.addActionListener(e -> addBoard());
+		newFrame.setVisible(true);
+    }
+    
+    public void addBoard() {
+    	if (boardNoField.getText().isEmpty() || titleField.getText().isEmpty() || contentField.getText().isEmpty()
+				|| writerField.getText().isEmpty()|| empNoField.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "모든 필드를 채워주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+			return; // 메서드 종료
+		}
+    	String boardNo = boardNoField.getText();
+		String title = (String) titleField.getText();
+		String content = contentField.getText();
+		String writer = writerField.getText();
+		String empNo = empNoField.getText();
+		
+		int result = lsh_dao.insertBoard(boardNo, title, content, writer, empNo);
+		System.out.println(result+"개 저장");
+		
+		boardNoField.setText("");
+		titleField.setText("");
+		contentField.setText("");
+		writerField.setText("");
+		empNoField.setText("");
+    	
     }
 
     public static void main(String[] args) {
