@@ -573,7 +573,12 @@ public class Main_Class extends JFrame {
 			boolean result = lsh_dao.deleteBoard(boardNo);
 			if(result) {
 				JOptionPane.showMessageDialog(this, "게시글이 삭제 되었습니다.", "삭제 완료", JOptionPane.INFORMATION_MESSAGE);
-				tableModel.removeRow(selectedRow);
+				String[] columnNames = {"글번호", "제목", "내용", "작성자명", "작성자번호", "작성일"};
+				Object[][] newData = dao.getBoardList();
+
+			    // 기존의 테이블 모델을 새 데이터로 교체
+			    DefaultTableModel newTableModel = new DefaultTableModel(newData, columnNames);
+			    table.setModel(newTableModel);
 		        // 테이블 새로고침
 		        table.revalidate();
 		        table.repaint();
