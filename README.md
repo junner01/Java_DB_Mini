@@ -1,6 +1,6 @@
 "# Java_DB_Mini" 
 
-## DB Table 추가 241113
+# DB Table 추가 241113
 
 CREATE TABLE board( 
 
