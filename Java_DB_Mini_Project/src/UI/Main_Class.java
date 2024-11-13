@@ -11,21 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
@@ -55,10 +41,9 @@ public class Main_Class extends JFrame {
 	private JButton kjy0227Button;
 	private JButton lshButton;
 	private JButton csbButton;
-	private JButton addBoardButton;
 	private JButton searchBoardButton;
 	private JButton userManageButton;
-	private JButton deleteUserButton;
+//	private JButton deleteUserButton;
 	private JButton salTopNButton;
 	
 	private JTextField boardNoField;
@@ -68,8 +53,6 @@ public class Main_Class extends JFrame {
 	private JComboBox empNoField;
 	private DefaultTableModel tableModel;
 	private JTable table;
-	
-	
 	
     public Main_Class() {
         setTitle("Database Control Panel");
@@ -85,10 +68,9 @@ public class Main_Class extends JFrame {
         lshButton = new JButton("이상현");
         csbButton = new JButton("조수빈");
         
-        
         searchBoardButton = new JButton("게시판");
         userManageButton = new JButton("유저 관리");
-        deleteUserButton = new JButton("유저 삭제");
+//        deleteUserButton = new JButton("유저 삭제");
         salTopNButton = new JButton("급여 TOP N");
 
         buttonPanel.add(kjy1122Button);
@@ -96,11 +78,10 @@ public class Main_Class extends JFrame {
         buttonPanel.add(kjy0227Button);
         buttonPanel.add(lshButton);
         buttonPanel.add(csbButton);
-        
        
         buttonPanel.add(searchBoardButton);
         buttonPanel.add(userManageButton);
-        buttonPanel.add(deleteUserButton);
+//        buttonPanel.add(deleteUserButton);
         buttonPanel.add(salTopNButton);
         add(buttonPanel, BorderLayout.NORTH);
 
@@ -116,7 +97,7 @@ public class Main_Class extends JFrame {
         csbButton.addActionListener(e -> showDeptStatistics());
         searchBoardButton.addActionListener(e -> showBoardList());
         salTopNButton.addActionListener(e -> showSalTopN());        
-        deleteUserButton.addActionListener(e -> deleteUser());
+//        deleteUserButton.addActionListener(e -> deleteUser());
         userManageButton.addActionListener(e -> showUserList());
 		setVisible(true);
 	}
@@ -142,6 +123,7 @@ public class Main_Class extends JFrame {
 		resultArea.repaint();
 	}
 
+	
 	//이상현
 	public void LSH0708() {
 		 ArrayList<EMP_DTO> list = lsh_dao.select();
@@ -199,6 +181,7 @@ public class Main_Class extends JFrame {
 		resultArea.repaint();
 	}
 
+	
 	//조이한
     // 직원 데이터를 조회하고 결과를 출력하는 메서드
     private void fetchAndDisplayEmployees() {
@@ -244,8 +227,6 @@ public class Main_Class extends JFrame {
         JOptionPane.showMessageDialog(null, message);
     }
 
-
-
     
     //조수빈
     private void showDeptStatistics() {
@@ -262,6 +243,7 @@ public class Main_Class extends JFrame {
         }
     }
     
+    // ============================================ 게시판 ============================================
     //게시판 조회
     public void showBoardList() {
     	// 데이터 가져오기
@@ -304,301 +286,6 @@ public class Main_Class extends JFrame {
 
         dialog.setVisible(true);
     }
-    
-    //유저 조회
-    public void showUserList() {
-    	// 데이터 가져오기
-        String[] columnNames = {"사번", "이름", "직무", "MGR", "입사년월", "봉급","보너스","부서번호"};
-        Object[][] data = lsh_dao.getUserList();
-
-        // JTable
-        tableModel = new DefaultTableModel(data, columnNames) {
-        	@Override
-            public boolean isCellEditable(int row, int column) {
-                // 모든 셀을 수정 불가하게 설정 (false 반환)
-                return false;
-            }
-        };
-        table = new JTable(tableModel);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane scrollPane = new JScrollPane(table);
-
-        JDialog dialog = new JDialog();
-        dialog.setTitle("유저 목록");
-        dialog.setSize(700, 300);
-        dialog.setLocationRelativeTo(null); // 화면 중앙에 띄우기
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-        // 상단 버튼 패널
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton addUserButton = new JButton("회원 가입");
-        addUserButton.addActionListener(e -> registerEmp());
-        topPanel.add(addUserButton);
-        JButton deleteUserButton = new JButton("회원 탈퇴");
-        deleteUserButton.addActionListener(e -> deleteUser());
-        topPanel.add(deleteUserButton);
-        JButton modifyUserButton = new JButton("회원 정보 수정");
-        modifyUserButton.addActionListener(e -> {});
-        topPanel.add(modifyUserButton);
-
-        // 팝업 창에 상단 패널과 테이블을 포함한 JScrollPane 추가
-        dialog.add(topPanel, BorderLayout.NORTH);
-        dialog.add(scrollPane, BorderLayout.CENTER);
-
-        dialog.setVisible(true);
-    }
-    
-    // 회원가입
-    public void registerEmp() {
-        // 회원가입 다이얼로그 생성
-        JDialog registrationDialog = new JDialog(this, "회원 가입", true);
-        registrationDialog.setSize(350, 400); // 적절한 크기 설정
-        registrationDialog.setLocationRelativeTo(this); // 부모 창에 상대적인 위치 설정
-
-        // JPanel 생성
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout()); // GridBagLayout 사용
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // 컴포넌트들 간의 여백 설정
-        gbc.fill = GridBagConstraints.HORIZONTAL; // 컴포넌트들이 가로로 꽉 차도록 설정
-
-        // EmpNo (사번) 필드
-        JLabel enoLabel = new JLabel("EmpNo:");
-        gbc.gridx = 0; // 첫 번째 열에 위치
-        gbc.gridy = 0; // 첫 번째 행에 위치
-        panel.add(enoLabel, gbc);
-
-        JTextField enoField = new JTextField(20);
-        gbc.gridx = 1; // 두 번째 열에 위치
-        panel.add(enoField, gbc);
-
-        // EmpName (이름) 필드
-        JLabel enameLabel = new JLabel("EmpName:");
-        gbc.gridx = 0;
-        gbc.gridy = 1; // 두 번째 행에 위치
-        panel.add(enameLabel, gbc);
-
-        JTextField enameField = new JTextField(20);
-        gbc.gridx = 1;
-        panel.add(enameField, gbc);
-
-        // Job (직무) 필드
-        JLabel jobLabel = new JLabel("Job:");
-        gbc.gridx = 0;
-        gbc.gridy = 2; // 세 번째 행에 위치
-        panel.add(jobLabel, gbc);
-
-        JTextField jobField = new JTextField(20);
-        gbc.gridx = 1;
-        panel.add(jobField, gbc);
-
-        // Salary (봉급) 필드
-        JLabel salaryLabel = new JLabel("Salary:");
-        gbc.gridx = 0;
-        gbc.gridy = 3; // 네 번째 행에 위치
-        panel.add(salaryLabel, gbc);
-
-        JTextField salaryField = new JTextField(20);
-        gbc.gridx = 1;
-        panel.add(salaryField, gbc);
-
-        // Dept (부서) 필드
-        JLabel deptLabel = new JLabel("Dept:");
-        gbc.gridx = 0;
-        gbc.gridy = 4; // 다섯 번째 행에 위치
-        panel.add(deptLabel, gbc);
-
-        JComboBox<String> deptComboBox = new JComboBox<>();
-        List<String> searchList = dao.getDeptList(); // 부서 리스트를 가져오는 메서드 호출
-        for (String dept : searchList) {
-            deptComboBox.addItem(dept);
-        }
-        gbc.gridx = 1;
-        panel.add(deptComboBox, gbc);
-
-        // 버튼 패널 생성
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-        // 회원가입 버튼
-        JButton submitButton = new JButton("회원 가입");
-        submitButton.addActionListener(e -> {
-            String eno = enoField.getText();
-            String ename = enameField.getText();
-            String job = jobField.getText();
-            String salary = salaryField.getText();
-            String dept = (String) deptComboBox.getSelectedItem();
-
-            // 입력 값 검증
-            if (eno.isEmpty() || ename.isEmpty() || job.isEmpty() || salary.isEmpty() || dept.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "모든 필드를 입력해주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
-            } else {
-                // DB에 데이터 저장하는 로직 (DAO 호출)
-                dao.registerEmp(new EMP_DTO(Integer.parseInt(eno), ename, job, 0, null, Integer.parseInt(salary), 0, Integer.parseInt(dept)));
-
-                JOptionPane.showMessageDialog(this, "회원가입 성공!", "성공", JOptionPane.INFORMATION_MESSAGE);
-                registrationDialog.dispose(); // 창 닫기
-                showUserList(); // 유저 목록 새로고침
-            }
-        });
-
-        // 취소 버튼
-        JButton cancelButton = new JButton("취소");
-        cancelButton.addActionListener(e -> registrationDialog.dispose());
-
-        buttonPanel.add(submitButton);
-        buttonPanel.add(cancelButton);
-
-        // 다이얼로그에 패널과 버튼 패널 추가
-        registrationDialog.add(panel, BorderLayout.CENTER);  // 필드들을 패널에 추가
-        registrationDialog.add(buttonPanel, BorderLayout.SOUTH); // 버튼들을 하단에 추가
-
-        registrationDialog.setVisible(true); // 다이얼로그 보이기
-    }
-    
-    // 회원 정보 수정
-    public void modifyEmp(int empNo) {
-        // 기존 회원 정보를 DB에서 조회하여 수정 창에 채워넣는 과정이 필요
-        EMP_DTO currentEmp = dao.getEmpByEmpNo(empNo); // 해당 사번으로 데이터 가져오기
-
-        if (currentEmp == null) {
-            JOptionPane.showMessageDialog(this, "해당 사번의 회원을 찾을 수 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // 수정 다이얼로그 생성
-        JDialog modifyDialog = new JDialog(this, "회원 정보 수정", true);
-        modifyDialog.setSize(350, 450); // 크기 조정
-        modifyDialog.setLocationRelativeTo(this);
-
-        // JPanel 생성
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // EmpNo (사번) 필드 - 수정 불가
-        JLabel enoLabel = new JLabel("EmpNo:");
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel.add(enoLabel, gbc);
-
-        JTextField enoField = new JTextField(String.valueOf(currentEmp.getEmpNo()), 20);
-        enoField.setEditable(false); // 사번은 수정 불가
-        gbc.gridx = 1;
-        panel.add(enoField, gbc);
-
-        // EmpName (이름) 필드
-        JLabel enameLabel = new JLabel("EmpName:");
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        panel.add(enameLabel, gbc);
-
-        JTextField enameField = new JTextField(currentEmp.getEmpName(), 20);
-        gbc.gridx = 1;
-        panel.add(enameField, gbc);
-
-        // Job (직무) 필드
-        JLabel jobLabel = new JLabel("Job:");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        panel.add(jobLabel, gbc);
-
-        JTextField jobField = new JTextField(currentEmp.getJob(), 20);
-        gbc.gridx = 1;
-        panel.add(jobField, gbc);
-
-        // Salary (봉급) 필드
-        JLabel salaryLabel = new JLabel("Salary:");
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        panel.add(salaryLabel, gbc);
-
-        JTextField salaryField = new JTextField(String.valueOf(currentEmp.getSalary()), 20);
-        gbc.gridx = 1;
-        panel.add(salaryField, gbc);
-
-        // Dept (부서) 필드
-        JLabel deptLabel = new JLabel("Dept:");
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        panel.add(deptLabel, gbc);
-
-        JComboBox<String> deptComboBox = new JComboBox<>();
-        List<String> deptList = dao.getDeptList(); // 부서 리스트를 가져오는 메서드 호출
-        for (String dept : deptList) {
-            deptComboBox.addItem(dept);
-        }
-        deptComboBox.setSelectedItem(String.valueOf(currentEmp.getDept())); // 기존 부서 선택
-        gbc.gridx = 1;
-        panel.add(deptComboBox, gbc);
-
-        // MGR (매니저 사번) 필드
-        JLabel mgrLabel = new JLabel("Mgr (매니저 사번):");
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        panel.add(mgrLabel, gbc);
-
-        JTextField mgrField = new JTextField(String.valueOf(currentEmp.getMgr()), 20); // 기존 매니저 사번
-        gbc.gridx = 1;
-        panel.add(mgrField, gbc);
-
-        // Comm (보너스) 필드
-        JLabel commLabel = new JLabel("Comm (보너스):");
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        panel.add(commLabel, gbc);
-
-        JTextField commField = new JTextField(String.valueOf(currentEmp.getComm()), 20); // 기존 보너스
-        gbc.gridx = 1;
-        panel.add(commField, gbc);
-
-        // 버튼 패널 생성
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-        // 수정 버튼
-        JButton submitButton = new JButton("수정");
-        submitButton.addActionListener(e -> {
-            String ename = enameField.getText();
-            String job = jobField.getText();
-            String salary = salaryField.getText();
-            String dept = (String) deptComboBox.getSelectedItem();
-            String mgr = mgrField.getText();
-            String comm = commField.getText();
-
-            // 입력 값 검증
-            if (ename.isEmpty() || job.isEmpty() || salary.isEmpty() || dept.isEmpty() || mgr.isEmpty() || comm.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "모든 필드를 입력해주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
-            } else {
-                try {
-                    int mgrInt = Integer.parseInt(mgr);  // 매니저 사번
-                    double commDouble = Double.parseDouble(comm);  // 보너스
-
-                    // DB에 데이터 수정하는 로직 (DAO 호출)
-                    dao.modifyEmp(new EMP_DTO(currentEmp.getEmpNo(), ename, job, mgrInt, null, Integer.parseInt(salary), commDouble, Integer.parseInt(dept)));
-
-                    JOptionPane.showMessageDialog(this, "회원 정보 수정 성공!", "성공", JOptionPane.INFORMATION_MESSAGE);
-                    modifyDialog.dispose(); // 창 닫기
-                    showUserList(); // 유저 목록 새로고침
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "매니저 사번과 보너스는 숫자로 입력해주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-
-        // 취소 버튼
-        JButton cancelButton = new JButton("취소");
-        cancelButton.addActionListener(e -> modifyDialog.dispose());
-
-        buttonPanel.add(submitButton);
-        buttonPanel.add(cancelButton);
-
-        // 다이얼로그에 패널과 버튼 패널 추가
-        modifyDialog.add(panel, BorderLayout.CENTER);  // 필드들을 패널에 추가
-        modifyDialog.add(buttonPanel, BorderLayout.SOUTH); // 버튼들을 하단에 추가
-
-        modifyDialog.setVisible(true); // 다이얼로그 보이기
-    }
 
     // 게시글 수정 창 열기
     public void openModifyWindow() {
@@ -615,7 +302,6 @@ public class Main_Class extends JFrame {
     	String modifyWriter="";
     	String modifyEmpno="";
     	
-    	
     	for(BOARD_DTO dto: list) {
     		modifyBoardNo=Integer.toString(dto.getBoardNo());
     		modifyTitle=dto.getTitle();
@@ -623,7 +309,6 @@ public class Main_Class extends JFrame {
     		modifyWriter=dto.getWriter();
     		modifyEmpno=Integer.toString(dto.getEmpno());
 		 }
-    	
     	
     	JFrame newFrame = new JFrame("게시글 수정");
 		newFrame.setSize(350, 450);
@@ -647,7 +332,6 @@ public class Main_Class extends JFrame {
 		boardNoField.setPreferredSize(new Dimension(200, 25));
 		boardNoField.setBorder(border);
 		newFrame.add(boardNoField, gbc);
-
 
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -696,7 +380,6 @@ public class Main_Class extends JFrame {
 		empNoField.setBorder(border);
 		newFrame.add(empNoField, gbc);
 
-		
 		gbc.gridx = 0;
 		gbc.gridy = 5;
 		gbc.gridwidth = 2; // 버튼이 두 열을 차지하도록 설정
@@ -707,6 +390,7 @@ public class Main_Class extends JFrame {
 		addBoardButton.addActionListener(e -> modifyBoard());
 		newFrame.setVisible(true);
     }
+    
     //게시글 수정 
     public void modifyBoard() {
     	if (boardNoField.getText().isEmpty() || titleField.getText().isEmpty() || contentField.getText().isEmpty()
@@ -740,7 +424,6 @@ public class Main_Class extends JFrame {
 			    table.repaint();
 			}
 			
-			
 		}
     }
     
@@ -766,7 +449,6 @@ public class Main_Class extends JFrame {
 		boardNoField.setPreferredSize(new Dimension(200, 25));
 		boardNoField.setBorder(border);
 		newFrame.add(boardNoField, gbc);
-
 
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -808,7 +490,6 @@ public class Main_Class extends JFrame {
 		empNoField.setBorder(border);
 		newFrame.add(empNoField, gbc);
 
-		
 		gbc.gridx = 0;
 		gbc.gridy = 5;
 		gbc.gridwidth = 2; // 버튼이 두 열을 차지하도록 설정
@@ -853,8 +534,8 @@ public class Main_Class extends JFrame {
 		    table.repaint();
 		}
 		
-		
     }
+    
     //게시글 삭제
     public void deleteBoard() {
     	int selectedRow = table.getSelectedRow();
@@ -885,6 +566,321 @@ public class Main_Class extends JFrame {
 			
 		}
     
+    }
+    
+    // ============================================ 유저 ============================================
+    // 유저 조회
+    public void showUserList() {
+        // 데이터 가져오기
+        String[] columnNames = {"사번", "이름", "직무", "MGR", "입사년월", "봉급", "보너스", "부서번호"};
+        Object[][] data = lsh_dao.getUserList();
+
+        // MGR 값이 0인 경우 빈 문자열로 변경
+        for (int i = 0; i < data.length; i++) {
+            if (data[i][3] != null && data[i][3].toString().equals("0")) {
+                data[i][3] = "";
+            }
+        }
+
+        // JTable
+        tableModel = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // 모든 셀을 수정 불가하게 설정 (false 반환)
+                return false;
+            }
+        };
+        table = new JTable(tableModel);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        JDialog dialog = new JDialog();
+        dialog.setTitle("유저 목록");
+        dialog.setSize(700, 300);
+        dialog.setLocationRelativeTo(null); // 화면 중앙에 띄우기
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        // 상단 버튼 패널
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton addUserButton = new JButton("회원 가입");
+        addUserButton.addActionListener(e -> registerEmp());
+        topPanel.add(addUserButton);
+        JButton deleteUserButton = new JButton("회원 탈퇴");
+        deleteUserButton.addActionListener(e -> deleteUser());
+        topPanel.add(deleteUserButton);
+        JButton modifyUserButton = new JButton("회원 정보 수정");
+        modifyUserButton.addActionListener(e -> {
+            // JTable에서 선택된 행의 사번 가져오기
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) { // 선택된 행이 있을 경우
+                int empno = (int) tableModel.getValueAt(selectedRow, 0);
+                modifyEmp(empno);
+            } else {
+                JOptionPane.showMessageDialog(dialog, "수정할 유저를 선택해주세요.", "선택 오류", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        topPanel.add(modifyUserButton);
+
+        dialog.add(topPanel, BorderLayout.NORTH);
+        dialog.add(scrollPane, BorderLayout.CENTER);
+
+        dialog.setVisible(true);
+    }
+    
+    // 회원가입
+    public void registerEmp() {
+        JDialog registrationDialog = new JDialog(this, "회원 가입", true);
+        registrationDialog.setSize(350, 400);
+        registrationDialog.setLocationRelativeTo(this);
+
+        // JPanel 생성
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // 컴포넌트들 간의 여백 설정
+        gbc.fill = GridBagConstraints.HORIZONTAL; // 컴포넌트들이 가로로 꽉 차도록 설정
+
+        // EmpNo (사번) 필드
+        JLabel enoLabel = new JLabel("사번:");
+        gbc.gridx = 0; // 첫 번째 열에 위치
+        gbc.gridy = 0; // 첫 번째 행에 위치
+        panel.add(enoLabel, gbc);
+
+        JTextField enoField = new JTextField(20);
+        gbc.gridx = 1; // 두 번째 열에 위치
+        panel.add(enoField, gbc);
+
+        // EmpName (이름) 필드
+        JLabel enameLabel = new JLabel("이름:");
+        gbc.gridx = 0;
+        gbc.gridy = 1; // 두 번째 행에 위치
+        panel.add(enameLabel, gbc);
+
+        JTextField enameField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(enameField, gbc);
+
+        // Job (직무) 필드
+        JLabel jobLabel = new JLabel("직무:");
+        gbc.gridx = 0;
+        gbc.gridy = 2; // 세 번째 행에 위치
+        panel.add(jobLabel, gbc);
+
+        JTextField jobField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(jobField, gbc);
+
+        // Salary (봉급) 필드
+        JLabel salaryLabel = new JLabel("봉급:");
+        gbc.gridx = 0;
+        gbc.gridy = 3; // 네 번째 행에 위치
+        panel.add(salaryLabel, gbc);
+
+        JTextField salaryField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(salaryField, gbc);
+
+        // Dept (부서) 필드
+        JLabel deptLabel = new JLabel("부서번호:");
+        gbc.gridx = 0;
+        gbc.gridy = 4; // 다섯 번째 행에 위치
+        panel.add(deptLabel, gbc);
+
+        JComboBox<String> deptComboBox = new JComboBox<>();
+        List<String> searchList = dao.getDeptList(); // 부서 리스트를 가져오는 메서드 호출
+        for (String dept : searchList) {
+            deptComboBox.addItem(dept);
+        }
+        gbc.gridx = 1;
+        panel.add(deptComboBox, gbc);
+
+        // 버튼 패널 생성
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        JButton submitButton = new JButton("회원 가입");
+        submitButton.addActionListener(e -> {
+            String eno = enoField.getText();
+            String ename = enameField.getText();
+            String job = jobField.getText();
+            String salary = salaryField.getText();
+            String dept = (String) deptComboBox.getSelectedItem();
+
+            // 입력 값 검증
+            if (eno.isEmpty() || ename.isEmpty() || job.isEmpty() || salary.isEmpty() || dept.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "모든 필드를 입력해주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+            } else {
+            	int registerCnt = dao.registerEmp(new EMP_DTO(Integer.parseInt(eno), ename, job, 0, null, Integer.parseInt(salary), 0, Integer.parseInt(dept)));
+                if(registerCnt == 0) {
+                	JOptionPane.showMessageDialog(this, "이미 존재하는 사번입니다.", "가입 실패", JOptionPane.ERROR_MESSAGE);
+                } else {                	
+                	JOptionPane.showMessageDialog(this, "회원가입 성공!", "가입 성공", JOptionPane.INFORMATION_MESSAGE);
+                	
+                	registrationDialog.dispose(); // 창 닫기
+                    // 유저 목록 새로고침
+                    String[] columnNames = {"사번", "이름", "직무", "MGR", "입사년월", "봉급","보너스","부서번호"};
+                    Object[][] data = lsh_dao.getUserList();
+                    tableModel.setDataVector(data, columnNames);
+                }
+            }
+        });
+
+        buttonPanel.add(submitButton);
+
+        registrationDialog.add(panel, BorderLayout.CENTER);
+        registrationDialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        registrationDialog.setVisible(true);
+    }
+    
+    // 회원정보 수정
+    public void modifyEmp(int empNo) {
+    	// 데이터 가져오기
+        EMP_DTO currentEmp = dao.getEmpByEmpNo(empNo);
+
+        if (currentEmp == null) {
+            JOptionPane.showMessageDialog(this, "해당 사번의 회원을 찾을 수 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        JDialog modifyDialog = new JDialog(this, "회원 정보 수정", true);
+        modifyDialog.setSize(400, 450);
+        modifyDialog.setLocationRelativeTo(this);
+
+        // JPanel 생성
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0; // 입력 필드의 크기를 균등하게 설정
+
+        // EmpNo (사번) 필드 - 수정 불가
+        JLabel enoLabel = new JLabel("사번:");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(enoLabel, gbc);
+
+        JLabel enoValueLabel = new JLabel(String.valueOf(currentEmp.getEmpno())); // 사번은 수정 불가
+        gbc.gridx = 1;
+        panel.add(enoValueLabel, gbc);
+
+        // EmpName (이름) 필드
+        JLabel enameLabel = new JLabel("이름:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(enameLabel, gbc);
+
+        JTextField enameField = new JTextField(currentEmp.getEname(), 20);
+        gbc.gridx = 1;
+        panel.add(enameField, gbc);
+
+        // Job (직무) 필드
+        JLabel jobLabel = new JLabel("직무:");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panel.add(jobLabel, gbc);
+
+        JTextField jobField = new JTextField(currentEmp.getJob(), 20);
+        gbc.gridx = 1;
+        panel.add(jobField, gbc);
+
+        // MGR (매니저 사번) 필드 - JComboBox로 변경
+        JLabel mgrLabel = new JLabel("MGR:");
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        panel.add(mgrLabel, gbc);
+
+        // 매니저 리스트를 가져와서 JComboBox에 추가
+        JComboBox<String> mgrComboBox = new JComboBox<>();
+        ArrayList<String> searchList = lsh_dao.searchUserId();
+        for (String list : searchList) {
+            mgrComboBox.addItem(list);
+        }
+        // 기존 매니저 사번을 콤보박스에서 선택
+        if (currentEmp.getMgr() == 0) {
+            mgrComboBox.setSelectedItem(null); // mgr이 0이면 null로 설정
+        } else {
+            mgrComboBox.setSelectedItem(String.valueOf(currentEmp.getMgr()));
+        }
+        gbc.gridx = 1;
+        panel.add(mgrComboBox, gbc);
+
+        // Salary (봉급) 필드
+        JLabel salaryLabel = new JLabel("봉급:");
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        panel.add(salaryLabel, gbc);
+
+        JTextField salaryField = new JTextField(String.valueOf(currentEmp.getSal()), 20);
+        gbc.gridx = 1;
+        panel.add(salaryField, gbc);
+
+        // Dept (부서) 필드
+        JLabel deptLabel = new JLabel("부서번호:");
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        panel.add(deptLabel, gbc);
+
+        JComboBox<String> deptComboBox = new JComboBox<>();
+        List<String> deptList = dao.getDeptList(); // 부서 리스트를 가져오는 메서드 호출
+        for (String dept : deptList) {
+            deptComboBox.addItem(dept);
+        }
+        deptComboBox.setSelectedItem(String.valueOf(currentEmp.getDeptno()));
+        gbc.gridx = 1;
+        panel.add(deptComboBox, gbc);
+
+        // Comm (보너스) 필드
+        JLabel commLabel = new JLabel("보너스:");
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        panel.add(commLabel, gbc);
+
+        JTextField commField = new JTextField(String.valueOf(currentEmp.getComm()), 20);
+        gbc.gridx = 1;
+        panel.add(commField, gbc);
+
+        // 버튼 패널 생성
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        JButton submitButton = new JButton("수정");
+        submitButton.addActionListener(e -> {
+            String ename = enameField.getText();
+            String job = jobField.getText();
+            String mgr = mgrComboBox.getSelectedItem() == null ? "" : (String)mgrComboBox.getSelectedItem(); // 콤보박스에서 매니저 사번 가져오기
+            String salary = salaryField.getText();
+            String dept = (String)deptComboBox.getSelectedItem();
+            String comm = commField.getText();
+
+            // 입력 값 검증
+            if (ename.isEmpty() || job.isEmpty() || mgr.isEmpty() || salary.isEmpty() || dept.isEmpty() || comm.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "모든 필드를 입력해주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+            } else {
+                try {
+                    int mgrInt = "".equals(mgr) ? 0 : Integer.parseInt(mgr); // mgr이 null이면 0으로 설정
+                    int commInt = Integer.parseInt(comm);  // 보너스
+
+                    dao.modifyEmp(new EMP_DTO(currentEmp.getEmpno(), ename, job, mgrInt, null, Integer.parseInt(salary), commInt, Integer.parseInt(dept)));
+                    JOptionPane.showMessageDialog(this, "회원 정보 수정 성공!", "성공", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    modifyDialog.dispose(); // 창 닫기
+                    // 유저 목록 새로고침
+                    String[] columnNames = {"사번", "이름", "직무", "MGR", "입사년월", "봉급", "보너스", "부서번호"};
+                    Object[][] data = lsh_dao.getUserList();
+                    tableModel.setDataVector(data, columnNames);
+
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "매니저 사번과 보너스는 숫자로 입력해주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        buttonPanel.add(submitButton);
+
+        modifyDialog.add(panel, BorderLayout.CENTER);
+        modifyDialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        modifyDialog.setVisible(true);
     }
 
 

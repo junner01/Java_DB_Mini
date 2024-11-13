@@ -141,7 +141,7 @@ public class Project_DAO {
 		
 		try {
 			con = DriverManager.getConnection(url, userid, passwd);
-			String sql = "INSERT INTO EMP VALUES(?,?,?,null,sysdate,?,null,?)";
+			String sql = "INSERT INTO EMP VALUES(?,?,?,null,sysdate,?,0,?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1,newEmp.getEmpno());
 			pstmt.setString(2,newEmp.getEname());
@@ -152,7 +152,7 @@ public class Project_DAO {
 			System.out.println(result + "개의 레코드가 저장");
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			result = 0;
 			
 		} finally {
 			try {
@@ -202,6 +202,45 @@ public class Project_DAO {
 	}
 	
 	//회원정보 가져오기
+	public EMP_DTO getEmpByEmpNo(int empno) {
+		EMP_DTO result = new EMP_DTO();
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = DriverManager.getConnection(url, userid, passwd);
+			String query = "SELECT * FROM EMP WHERE empno = ?";
+			pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, empno);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {				
+				result.setEmpno(rs.getInt("empno"));
+				result.setEname(rs.getString("ename"));
+				result.setJob(rs.getString("job"));
+				result.setMgr(rs.getInt("mgr"));
+				result.setSal(rs.getInt("sal"));
+				result.setComm(rs.getInt("comm"));
+				result.setDeptno(rs.getInt("deptno"));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (pstmt != null) pstmt.close();
+				if (con != null) con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 	
 	//회원수정
 	public void modifyEmp(EMP_DTO empDto) {

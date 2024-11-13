@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import DTO.BOARD_DTO;
 import DTO.EMP_DTO;
@@ -307,6 +308,66 @@ public class LSH0708_Project_DAO {
 		} // finally
 		return result1;
 	} // modify
+	
+	
+	//게시판 조회
+		public Object[][] getUserList() {
+			List<EMP_DTO> result = new ArrayList<>();
+		    Object[][] rowData = null;
+			
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			try {
+		        con = DriverManager.getConnection(url, userid, passwd);
+		        String query = "SELECT empno, ename, job, mgr, TO_CHAR(hiredate, 'YYYY-MM-DD') AS hiredate, sal, comm, deptno FROM EMP";
+		        pstmt = con.prepareStatement(query);
+		        rs = pstmt.executeQuery();
+
+		        while (rs.next()) {
+		            EMP_DTO dto = new EMP_DTO(
+		                    rs.getInt("empno"),
+		                    rs.getString("ename"),
+		                    rs.getString("job"),
+		                    rs.getInt("mgr"),
+		                    rs.getString("hiredate"),
+		                    rs.getInt("sal"),
+		                    rs.getInt("comm"),
+		                    rs.getInt("deptno")
+		            );
+		            result.add(dto);
+		        }
+		        
+		        // List에서 Object[][]로 변환
+		        rowData = new Object[result.size()][8];
+		        for (int i = 0; i < result.size(); i++) {
+		            EMP_DTO dto = result.get(i);
+		            rowData[i][0] = dto.getEmpno();
+		            rowData[i][1] = dto.getEname();
+		            rowData[i][2] = dto.getJob();
+		            rowData[i][3] = dto.getMgr();
+		            rowData[i][4] = dto.getHiredate();
+		            rowData[i][5] = dto.getSal();
+		            rowData[i][6] = dto.getComm();
+		            rowData[i][7] = dto.getDeptno();
+		            
+		        }
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        try {
+		            if (rs != null) rs.close();
+		            if (pstmt != null) pstmt.close();
+		            if (con != null) con.close();
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        }
+		    }
+			
+			return rowData;
+		}
 	// 김진영
 
 	// 이상현
