@@ -308,7 +308,7 @@ public class Main_Class extends JFrame {
     public void showUserList() {
     	// 데이터 가져오기
         String[] columnNames = {"사번", "이름", "직무", "MGR", "입사년월", "봉급","보너스","부서번호"};
-        Object[][] data = dao.getBoardList();
+        Object[][] data = lsh_dao.getUserList();
 
         // JTable
         tableModel = new DefaultTableModel(data, columnNames) {
