@@ -135,6 +135,41 @@ public class LSH0708_Project_DAO {
 		}
 		return list;
 	};
+	
+	// 게시글 추가
+		public int insertBoard(String boardNo, String title, String content, String writer, String empNo) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			int result1 = 0;
+			int lastId = 0;
+			try {
+				con = DriverManager.getConnection(url, userid, passwd);
+				// 마지막 사용자 id 이용하기 위해 내림차순으로 조회
+
+				String sql = "INSERT INTO board(boardno,title,content,writer,empno,regdate)"
+						+ "VALUES(?,?,?,?,?,sysdate)";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, boardNo);
+				pstmt.setString(2, title);
+				pstmt.setString(3, content);
+				pstmt.setString(4, writer);
+				pstmt.setString(5, empNo);
+				result1 = pstmt.executeUpdate();
+				System.out.println(result1 + "개의 레코드가 저장");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (pstmt != null)
+						pstmt.close();
+					if (con != null)
+						con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			} // finally
+			return result1;
+		} // insert
 	// 김진영
 
 	// 이상현
