@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import DTO.BOARD_DTO;
+import DTO.DEPT_DTO;
 import DTO.EMP_DEPT_DTO;
+import DTO.EMP_DTO;
 
 public class Project_DAO {
 
@@ -129,4 +131,108 @@ public class Project_DAO {
 		return rowData;
 	}
 	
+	//회원가입
+	public int registerEmp(EMP_DTO newEmp) {
+		int result = 0;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = DriverManager.getConnection(url, userid, passwd);
+			String sql = "INSERT INTO EMP VALUES(?,?,?,null,sysdate,?,null,?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1,newEmp.getEmpno());
+			pstmt.setString(2,newEmp.getEname());
+			pstmt.setString(3,newEmp.getJob());
+			pstmt.setInt(4,newEmp.getSal());
+			pstmt.setInt(5,newEmp.getDeptno());
+			result = pstmt.executeUpdate();
+			System.out.println(result + "개의 레코드가 저장");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (pstmt != null) pstmt.close();
+				if (con != null) con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	//부서목록
+	public List<String> getDeptList() {
+		List<String> result = new ArrayList<String>();
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = DriverManager.getConnection(url, userid, passwd);
+			String query = "SELECT deptno FROM DEPT";
+			pstmt = con.prepareStatement(query);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {				
+				result.add(rs.getString("deptno"));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (pstmt != null) pstmt.close();
+				if (con != null) con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	//회원정보 가져오기
+	
+	//회원수정
+	public void modifyEmp(EMP_DTO empDto) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = DriverManager.getConnection(url, userid, passwd);
+			String sql = "UPDATE EMP SET ename = ?, job = ?, mgr = ?, sal = ?, comm = ?, deptno = ? WHERE empno = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1,empDto.getEname());
+			pstmt.setString(2,empDto.getJob());
+			pstmt.setInt(3,empDto.getMgr());
+			pstmt.setInt(4,empDto.getSal());
+			pstmt.setInt(5,empDto.getComm());
+			pstmt.setInt(6,empDto.getDeptno());
+			pstmt.setInt(7,empDto.getEmpno());
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (pstmt != null) pstmt.close();
+				if (con != null) con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
