@@ -16,6 +16,7 @@ public class Jih0316_Board_DAO {
     }
 
     public boolean deleteUser(int empno) throws SQLException {
+    	System.out.println(empno);
         // 게시글 삭제 쿼리
         String deletePostsSQL = "DELETE FROM board WHERE empno = ?";
         // 사원 삭제 쿼리 (emp 테이블)

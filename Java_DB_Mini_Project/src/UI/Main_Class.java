@@ -67,6 +67,7 @@ public class Main_Class extends JFrame {
 	private JComboBox empNoField;
 	private DefaultTableModel tableModel;
 	private JTable table;
+	private JTable UserTable;
 	
 	
 	
@@ -87,7 +88,7 @@ public class Main_Class extends JFrame {
         
         searchBoardButton = new JButton("게시판");
         userManageButton = new JButton("유저 관리");
-        deleteUserButton = new JButton("유저 삭제");
+        
         salTopNButton = new JButton("급여 TOP N");
 
         buttonPanel.add(kjy1122Button);
@@ -99,7 +100,7 @@ public class Main_Class extends JFrame {
        
         buttonPanel.add(searchBoardButton);
         buttonPanel.add(userManageButton);
-        buttonPanel.add(deleteUserButton);
+        
         buttonPanel.add(salTopNButton);
         add(buttonPanel, BorderLayout.NORTH);
 
@@ -115,7 +116,7 @@ public class Main_Class extends JFrame {
         csbButton.addActionListener(e -> showDeptStatistics());
         searchBoardButton.addActionListener(e -> showBoardList());
         salTopNButton.addActionListener(e -> showSalTopN());        
-        deleteUserButton.addActionListener(e -> deleteUser());
+        
         userManageButton.addActionListener(e -> showUserList());
 		setVisible(true);
 	}
@@ -241,6 +242,39 @@ public class Main_Class extends JFrame {
         // 삭제 성공 여부에 따른 메시지 표시
         String message = isDeleted ? "사원과 해당 사원의 게시글이 성공적으로 삭제되었습니다." : "사원 또는 사원의 게시글 삭제에 실패했습니다.";
         JOptionPane.showMessageDialog(null, message);
+        
+        String[] columnNames = {"사번", "이름", "직무", "MGR", "입사년월", "봉급","보너스","부서번호"};
+		Object[][] newData = lsh_dao.getUserList();
+
+	    // 기존의 테이블 모델을 새 데이터로 교체
+	    DefaultTableModel newTableModel = new DefaultTableModel(newData, columnNames) {
+	    	@Override
+	        public boolean isCellEditable(int row, int column) {
+	            // 모든 셀을 수정 불가능하게 설정
+	            return false;
+	        }
+	    };
+	    UserTable.setModel(newTableModel);
+        // 테이블 새로고침
+	    UserTable.revalidate();
+	    UserTable.repaint();
+	    
+	    String[] columnNames2 = {"글번호", "제목", "내용", "작성자명", "작성자번호", "작성일"};
+		Object[][] newData2 = dao.getBoardList();
+
+	    // 기존의 테이블 모델을 새 데이터로 교체
+	    DefaultTableModel newTableModel2 = new DefaultTableModel(newData2, columnNames2) {
+	    	@Override
+	        public boolean isCellEditable(int row, int column) {
+	            // 모든 셀을 수정 불가능하게 설정
+	            return false;
+	        }
+	    };
+	    table.setModel(newTableModel2);
+        // 테이블 새로고침
+	    table.revalidate();
+	    table.repaint();
+        
     }
 
 
@@ -318,9 +352,9 @@ public class Main_Class extends JFrame {
                 return false;
             }
         };
-        table = new JTable(tableModel);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane scrollPane = new JScrollPane(table);
+        UserTable = new JTable(tableModel);
+        UserTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollPane = new JScrollPane(UserTable);
 
         JDialog dialog = new JDialog();
         dialog.setTitle("유저 목록");
@@ -334,7 +368,7 @@ public class Main_Class extends JFrame {
         addUserButton.addActionListener(e -> openAddUserWindow());
         topPanel.add(addUserButton);
         JButton deleteUserButton = new JButton("회원 탈퇴");
-        deleteUserButton.addActionListener(e ->deleteBoard());
+        deleteUserButton.addActionListener(e ->deleteUser());
         topPanel.add(deleteUserButton);
         JButton modifyUserButton = new JButton("회원 정보 수정");
         modifyUserButton.addActionListener(e ->openModifyWindow());

@@ -340,7 +340,7 @@ public class LSH0708_Project_DAO {
 		        }
 		        
 		        // List에서 Object[][]로 변환
-		        rowData = new Object[result.size()][6];
+		        rowData = new Object[result.size()][8];
 		        for (int i = 0; i < result.size(); i++) {
 		            EMP_DTO dto = result.get(i);
 		            rowData[i][0] = dto.getEmpno();
