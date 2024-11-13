@@ -168,24 +168,28 @@ public class Main_Class extends JFrame {
 	}
 	public void showSalTopN() {
 		int userNum = lsh_dao.userCount();
-		int N = Integer.parseInt(JOptionPane.showInputDialog("Top N을 입력하세요. 최대 사원 수 : "+userNum));
-		
-		if(userNum<N) {
-			JOptionPane.showMessageDialog(null, "최대 사원수 보다 입력을 작게 해주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
-			return; // 메서드 종료
-		}
-		resultArea.setText("");
-		ArrayList<EMP_DTO> list = lsh_dao.SalTopN(N);
-		int count=1;
-		resultArea.append("급여 TOP " + N + "\n");
-		for(EMP_DTO dto:list) {
-			String result = count+ ". EMPNO:"+ dto.getEmpno()+", ENAME:"+ dto.getEname()+", JOB:"+ dto.getJob()+", "
-					+ "MGR:"+dto.getMgr()+", HIREDATE:"+dto.getHiredate()+", SAL:"+dto.getSal()+", "
-							+ "COMM:"+dto.getComm()+", DEPTNO:"+dto.getDeptno();
-			resultArea.append(result+"\n");
-			count++;
-		}
-		
+		int N = 0;
+		String input = JOptionPane.showInputDialog("Top N을 입력하세요. 최대 사원 수 : "+userNum);
+		if(input == null) {
+			return;
+		}else {
+			N =Integer.parseInt(input);
+			if(userNum<N) {
+				JOptionPane.showMessageDialog(null, "최대 사원수 보다 입력을 작게 해주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+				return; // 메서드 종료
+			}
+			resultArea.setText("");
+			ArrayList<EMP_DTO> list = lsh_dao.SalTopN(N);
+			int count=1;
+			resultArea.append("급여 TOP " + N + "\n");
+			for(EMP_DTO dto:list) {
+				String result = count+ ". EMPNO:"+ dto.getEmpno()+", ENAME:"+ dto.getEname()+", JOB:"+ dto.getJob()+", "
+						+ "MGR:"+dto.getMgr()+", HIREDATE:"+dto.getHiredate()+", SAL:"+dto.getSal()+", "
+								+ "COMM:"+dto.getComm()+", DEPTNO:"+dto.getDeptno();
+				resultArea.append(result+"\n");
+				count++;
+			}
+		}		
 	}
 	
 	
