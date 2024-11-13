@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import DTO.BOARD_DTO;
 import DTO.EMP_DTO;
 
 public class LSH0708_Project_DAO {
@@ -63,8 +64,9 @@ public class LSH0708_Project_DAO {
 		}
 		return list;
 	};
+
 	public int userCount() {
-		int userNum=0;
+		int userNum = 0;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -76,7 +78,7 @@ public class LSH0708_Project_DAO {
 			if (rs.next()) {
 				userNum = rs.getInt(1);
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -93,13 +95,13 @@ public class LSH0708_Project_DAO {
 		}
 		return userNum;
 	};
-	
+
 	public ArrayList<EMP_DTO> SalTopN(int TopN) {
 		ArrayList<EMP_DTO> list = new ArrayList<EMP_DTO>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		int userNum=0;
+		int userNum = 0;
 		try {
 			con = DriverManager.getConnection(url, userid, passwd);
 			String query = "SELECT * from emp where ROWNUM <=? Order by sal desc";
@@ -135,41 +137,176 @@ public class LSH0708_Project_DAO {
 		}
 		return list;
 	};
-	
-	// 게시글 추가
-		public int insertBoard(String boardNo, String title, String content, String writer, String empNo) {
-			Connection con = null;
-			PreparedStatement pstmt = null;
-			int result1 = 0;
-			int lastId = 0;
-			try {
-				con = DriverManager.getConnection(url, userid, passwd);
-				// 마지막 사용자 id 이용하기 위해 내림차순으로 조회
 
-				String sql = "INSERT INTO board(boardno,title,content,writer,empno,regdate)"
-						+ "VALUES(?,?,?,?,?,sysdate)";
-				pstmt = con.prepareStatement(sql);
-				pstmt.setString(1, boardNo);
-				pstmt.setString(2, title);
-				pstmt.setString(3, content);
-				pstmt.setString(4, writer);
-				pstmt.setString(5, empNo);
-				result1 = pstmt.executeUpdate();
-				System.out.println(result1 + "개의 레코드가 저장");
-			} catch (Exception e) {
+	// 게시글 추가
+	public int insertBoard(String boardNo, String title, String content, String writer, String empNo) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int result1 = 0;
+		int lastId = 0;
+		try {
+			con = DriverManager.getConnection(url, userid, passwd);
+			// 마지막 사용자 id 이용하기 위해 내림차순으로 조회
+
+			String sql = "INSERT INTO board(boardno,title,content,writer,empno,regdate)" + "VALUES(?,?,?,?,?,sysdate)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, boardNo);
+			pstmt.setString(2, title);
+			pstmt.setString(3, content);
+			pstmt.setString(4, writer);
+			pstmt.setString(5, empNo);
+			result1 = pstmt.executeUpdate();
+			System.out.println(result1 + "개의 레코드가 저장");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
 				e.printStackTrace();
-			} finally {
-				try {
-					if (pstmt != null)
-						pstmt.close();
-					if (con != null)
-						con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			} // finally
-			return result1;
-		} // insert
+			}
+		} // finally
+		return result1;
+	} // insert
+
+	public ArrayList<String> searchUserId() {
+		ArrayList<String> list = new ArrayList<String>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = DriverManager.getConnection(url, userid, passwd);
+			// 마지막 사용자 id 이용하기 위해 내림차순으로 조회
+
+			String query = "SELECT empno from emp";
+
+			pstmt = con.prepareStatement(query);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				String result = rs.getString(1);
+				list.add(result);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} // finally
+
+		return list;
+	}
+
+	public boolean deleteBoard(int delBoardNo) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		boolean result = false;
+		try {
+
+			con = DriverManager.getConnection(url, userid, passwd);
+			String sql = "DELETE FROM board WHERE boardno = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, delBoardNo);
+			rs = pstmt.executeQuery();
+			System.out.println(sql);
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} // finally
+		return result;
+	} // delete
+
+	// 수정할 게시글 데이터 검색
+	public ArrayList<BOARD_DTO> selectedModifyBoard(int boardNo) {
+		ArrayList<BOARD_DTO> list = new ArrayList<BOARD_DTO>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int userNum = 0;
+		try {
+			con = DriverManager.getConnection(url, userid, passwd);
+			String query = "SELECT * from board where boardno = ?";
+			pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, boardNo);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				BOARD_DTO dto = new BOARD_DTO();
+				dto.setBoardNo(rs.getInt("boardno"));
+				dto.setTitle(rs.getString("title"));
+				dto.setContent(rs.getString("content"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setEmpno(rs.getInt("empno"));
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+
+	// 게시글 수정
+	public int modifyBoard(String boardNo, String title, String content, String writer, String empNo) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int result1 = 0;
+		int lastId = 0;
+		try {
+			con = DriverManager.getConnection(url, userid, passwd);
+			// 마지막 사용자 id 이용하기 위해 내림차순으로 조회
+
+			String sql = "update board set title=?,content=?,writer=?,empno=?,regdate=sysdate where boardno=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, title);
+			pstmt.setString(2, content);
+			pstmt.setString(3, writer);
+			pstmt.setString(4, empNo);
+			pstmt.setString(5, boardNo);
+			result1 = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} // finally
+		return result1;
+	} // modify
 	// 김진영
 
 	// 이상현
