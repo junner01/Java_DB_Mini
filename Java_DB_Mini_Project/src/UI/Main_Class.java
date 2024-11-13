@@ -349,9 +349,9 @@ public class Main_Class extends JFrame {
         JButton addBoardButton = new JButton("게시글 추가");
         addBoardButton.addActionListener(e -> showAddList());
         topPanel.add(addBoardButton);
-        JButton deleteBoardButton = new JButton("게시글 삭제");
-        deleteBoardButton.addActionListener(e ->{});
-        topPanel.add(deleteBoardButton);
+//        JButton deleteBoardButton = new JButton("게시글 삭제");
+//        deleteBoardButton.addActionListener(e ->{});
+//        topPanel.add(deleteBoardButton);
 
         // 팝업 창에 상단 패널과 테이블을 포함한 JScrollPane 추가
         dialog.add(topPanel, BorderLayout.NORTH);
