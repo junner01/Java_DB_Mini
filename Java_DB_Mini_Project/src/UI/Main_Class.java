@@ -56,6 +56,7 @@ public class Main_Class extends JFrame {
 	private JButton csbButton;
 	private JButton addBoardButton;
 	private JButton searchBoardButton;
+	private JButton userManageButton;
 	private JButton deleteUserButton;
 	private JButton salTopNButton;
 	
@@ -85,6 +86,7 @@ public class Main_Class extends JFrame {
         
         
         searchBoardButton = new JButton("게시판");
+        userManageButton = new JButton("유저 관리");
         deleteUserButton = new JButton("유저 삭제");
         salTopNButton = new JButton("급여 TOP N");
 
@@ -96,6 +98,7 @@ public class Main_Class extends JFrame {
         
        
         buttonPanel.add(searchBoardButton);
+        buttonPanel.add(userManageButton);
         buttonPanel.add(deleteUserButton);
         buttonPanel.add(salTopNButton);
         add(buttonPanel, BorderLayout.NORTH);
@@ -113,7 +116,7 @@ public class Main_Class extends JFrame {
         searchBoardButton.addActionListener(e -> showBoardList());
         salTopNButton.addActionListener(e -> showSalTopN());        
         deleteUserButton.addActionListener(e -> deleteUser());
-
+        userManageButton.addActionListener(e -> showUserList());
 		setVisible(true);
 	}
 	
@@ -293,6 +296,49 @@ public class Main_Class extends JFrame {
         JButton modifyBoardButton = new JButton("게시글 수정");
         modifyBoardButton.addActionListener(e ->openModifyWindow());
         topPanel.add(modifyBoardButton);
+
+        // 팝업 창에 상단 패널과 테이블을 포함한 JScrollPane 추가
+        dialog.add(topPanel, BorderLayout.NORTH);
+        dialog.add(scrollPane, BorderLayout.CENTER);
+
+        dialog.setVisible(true);
+    }
+    
+  //유저 조회
+    public void showUserList() {
+    	// 데이터 가져오기
+        String[] columnNames = {"사번", "이름", "직무", "MGR", "입사년월", "봉급","보너스","부서번호"};
+        Object[][] data = dao.getBoardList();
+
+        // JTable
+        tableModel = new DefaultTableModel(data, columnNames) {
+        	@Override
+            public boolean isCellEditable(int row, int column) {
+                // 모든 셀을 수정 불가하게 설정 (false 반환)
+                return false;
+            }
+        };
+        table = new JTable(tableModel);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        JDialog dialog = new JDialog();
+        dialog.setTitle("유저 목록");
+        dialog.setSize(700, 300);
+        dialog.setLocationRelativeTo(null); // 화면 중앙에 띄우기
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        // 상단 버튼 패널
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton addUserButton = new JButton("회원 가입");
+        addUserButton.addActionListener(e -> openAddUserWindow());
+        topPanel.add(addUserButton);
+        JButton deleteUserButton = new JButton("회원 탈퇴");
+        deleteUserButton.addActionListener(e ->deleteBoard());
+        topPanel.add(deleteUserButton);
+        JButton modifyUserButton = new JButton("회원 정보 수정");
+        modifyUserButton.addActionListener(e ->openModifyWindow());
+        topPanel.add(modifyUserButton);
 
         // 팝업 창에 상단 패널과 테이블을 포함한 JScrollPane 추가
         dialog.add(topPanel, BorderLayout.NORTH);
