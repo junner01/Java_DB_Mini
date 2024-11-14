@@ -52,6 +52,7 @@ public class Main_Class extends JFrame {
 	private JTextField writerField;
 	private JComboBox empNoField;
 	private DefaultTableModel tableModel;
+	private DefaultTableModel UsertableModel;
 	private JTable table;
 	private JTable UserTable;
 	
@@ -230,34 +231,14 @@ public class Main_Class extends JFrame {
         String[] columnNames = {"사번", "이름", "직무", "MGR", "입사년월", "봉급","보너스","부서번호"};
 		Object[][] newData = lsh_dao.getUserList();
 
-	    // 기존의 테이블 모델을 새 데이터로 교체
-	    DefaultTableModel newTableModel = new DefaultTableModel(newData, columnNames) {
-	    	@Override
-	        public boolean isCellEditable(int row, int column) {
-	            // 모든 셀을 수정 불가능하게 설정
-	            return false;
-	        }
-	    };
-//	    UserTable.setModel(newTableModel);
-//        // 테이블 새로고침
-//	    UserTable.revalidate();
-//	    UserTable.repaint();
-//	    
-//	    String[] columnNames2 = {"글번호", "제목", "내용", "작성자명", "작성자번호", "작성일"};
-//		Object[][] newData2 = dao.getBoardList();
-//
-//	    // 기존의 테이블 모델을 새 데이터로 교체
-//	    DefaultTableModel newTableModel2 = new DefaultTableModel(newData2, columnNames2) {
-//	    	@Override
-//	        public boolean isCellEditable(int row, int column) {
-//	            // 모든 셀을 수정 불가능하게 설정
-//	            return false;
-//	        }
-//	    };
-//	    table.setModel(newTableModel2);
-//        // 테이블 새로고침
-//	    table.revalidate();
-//	    table.repaint();
+
+		UsertableModel.setDataVector(newData, columnNames);
+
+	    String[] columnNames2 = {"글번호", "제목", "내용", "작성자명", "작성자번호", "작성일"};
+		Object[][] newData2 = dao.getBoardList();
+		
+		tableModel.setDataVector(newData2, columnNames2);
+
         
     }
 
@@ -618,14 +599,14 @@ public class Main_Class extends JFrame {
         }
 
         // JTable
-        tableModel = new DefaultTableModel(data, columnNames) {
+        UsertableModel = new DefaultTableModel(data, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 // 모든 셀을 수정 불가하게 설정 (false 반환)
                 return false;
             }
         };
-        table = new JTable(tableModel);
+        table = new JTable(UsertableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(table);
 
@@ -754,7 +735,7 @@ public class Main_Class extends JFrame {
                     // 유저 목록 새로고침
                     String[] columnNames = {"사번", "이름", "직무", "MGR", "입사년월", "봉급","보너스","부서번호"};
                     Object[][] data = lsh_dao.getUserList();
-                    tableModel.setDataVector(data, columnNames);
+                    UsertableModel.setDataVector(data, columnNames);
                 }
             }
         });
