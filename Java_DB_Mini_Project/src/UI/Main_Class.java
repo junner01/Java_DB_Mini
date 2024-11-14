@@ -629,7 +629,7 @@ public class Main_Class extends JFrame {
             // JTable에서 선택된 행의 사번 가져오기
             int selectedRow = table.getSelectedRow();
             if (selectedRow != -1) { // 선택된 행이 있을 경우
-                int empno = (int) tableModel.getValueAt(selectedRow, 0);
+                int empno = (int) UsertableModel.getValueAt(selectedRow, 0);
                 modifyEmp(empno);
             } else {
                 JOptionPane.showMessageDialog(dialog, "수정할 유저를 선택해주세요.", "선택 오류", JOptionPane.WARNING_MESSAGE);
@@ -883,7 +883,7 @@ public class Main_Class extends JFrame {
                     // 유저 목록 새로고침
                     String[] columnNames = {"사번", "이름", "직무", "MGR", "입사년월", "봉급", "보너스", "부서번호"};
                     Object[][] data = lsh_dao.getUserList();
-                    tableModel.setDataVector(data, columnNames);
+                    UsertableModel.setDataVector(data, columnNames);
 
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(this, "매니저 사번과 보너스는 숫자로 입력해주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
