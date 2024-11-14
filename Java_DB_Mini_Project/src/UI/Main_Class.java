@@ -606,9 +606,9 @@ public class Main_Class extends JFrame {
                 return false;
             }
         };
-        table = new JTable(UsertableModel);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane scrollPane = new JScrollPane(table);
+        UserTable = new JTable(UsertableModel);
+        UserTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollPane = new JScrollPane(UserTable);
 
         JDialog dialog = new JDialog();
         dialog.setTitle("유저 목록");
@@ -627,7 +627,7 @@ public class Main_Class extends JFrame {
         JButton modifyUserButton = new JButton("회원 정보 수정");
         modifyUserButton.addActionListener(e -> {
             // JTable에서 선택된 행의 사번 가져오기
-            int selectedRow = table.getSelectedRow();
+            int selectedRow = UserTable.getSelectedRow();
             if (selectedRow != -1) { // 선택된 행이 있을 경우
                 int empno = (int) UsertableModel.getValueAt(selectedRow, 0);
                 modifyEmp(empno);
