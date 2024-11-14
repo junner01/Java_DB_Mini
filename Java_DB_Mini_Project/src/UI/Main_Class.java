@@ -238,26 +238,26 @@ public class Main_Class extends JFrame {
 	            return false;
 	        }
 	    };
-	    UserTable.setModel(newTableModel);
-        // 테이블 새로고침
-	    UserTable.revalidate();
-	    UserTable.repaint();
-	    
-	    String[] columnNames2 = {"글번호", "제목", "내용", "작성자명", "작성자번호", "작성일"};
-		Object[][] newData2 = dao.getBoardList();
-
-	    // 기존의 테이블 모델을 새 데이터로 교체
-	    DefaultTableModel newTableModel2 = new DefaultTableModel(newData2, columnNames2) {
-	    	@Override
-	        public boolean isCellEditable(int row, int column) {
-	            // 모든 셀을 수정 불가능하게 설정
-	            return false;
-	        }
-	    };
-	    table.setModel(newTableModel2);
-        // 테이블 새로고침
-	    table.revalidate();
-	    table.repaint();
+//	    UserTable.setModel(newTableModel);
+//        // 테이블 새로고침
+//	    UserTable.revalidate();
+//	    UserTable.repaint();
+//	    
+//	    String[] columnNames2 = {"글번호", "제목", "내용", "작성자명", "작성자번호", "작성일"};
+//		Object[][] newData2 = dao.getBoardList();
+//
+//	    // 기존의 테이블 모델을 새 데이터로 교체
+//	    DefaultTableModel newTableModel2 = new DefaultTableModel(newData2, columnNames2) {
+//	    	@Override
+//	        public boolean isCellEditable(int row, int column) {
+//	            // 모든 셀을 수정 불가능하게 설정
+//	            return false;
+//	        }
+//	    };
+//	    table.setModel(newTableModel2);
+//        // 테이블 새로고침
+//	    table.revalidate();
+//	    table.repaint();
         
     }
 
