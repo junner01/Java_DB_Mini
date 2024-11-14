@@ -321,7 +321,7 @@ public class LSH0708_Project_DAO {
 			
 			try {
 		        con = DriverManager.getConnection(url, userid, passwd);
-		        String query = "SELECT * FROM emp";
+		        String query = "SELECT empno, ename, job, mgr, TO_CHAR(hiredate, 'YYYY-MM-DD') AS hiredate, sal, comm, deptno FROM EMP";
 		        pstmt = con.prepareStatement(query);
 		        rs = pstmt.executeQuery();
 
